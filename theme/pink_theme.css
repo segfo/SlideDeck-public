@@ -1,0 +1,113 @@
+/*@theme pink-theme */
+@import "base-theme"; /* default_theme を継承 */
+
+/* ── カラーパレット (やわらかいピンク系) ─────────────────────────
+   --pink-dark   : #be185d  見出し・アクセント主色
+   --pink-mid    : #ec4899  ボーダー・装飾
+   --pink-light  : #fce7f3  背景ハイライト
+   --pink-bg     : #fff1f5  スライド背景
+   ──────────────────────────────────────────────────────────────── */
+
+section {
+    background-color: #fff1f5;
+    color: #3b1f2b;
+}
+
+header {
+    color: #f9a8d4;
+    border-bottom: 1px solid #fbcfe8;
+}
+
+footer {
+    color: #f9a8d4;
+}
+
+h1 {
+    color: #be185d;
+    border-bottom: 2px solid #ec4899;
+}
+
+h2 {
+    color: #be185d;
+    border-left: 8px solid #ec4899;
+}
+
+strong {
+    color: #3b1f2b;
+    background: linear-gradient(transparent 70%, #f9a8d480 70%);
+}
+
+.fact {
+    background: #fce7f3;
+    border-left: 4px solid #ec4899;
+}
+
+th {
+    background: #be185d;
+    color: white;
+}
+
+/* ── divider ─────────────────────────────────────────────────── */
+section.divider,
+section.title {
+    background-color: #fff1f5;
+}
+
+section.divider h1,
+section.title h1 {
+    color: #be185d;
+    border-bottom: 2px solid #ec4899;
+}
+
+section.divider h2,
+section.title h2 {
+    color: #f472b6;
+}
+
+/* ── toc 共通 h1 ─────────────────────────────────────────────── */
+section.toc h1,
+section.toc-grid h1,
+section.toc-grid-col h1 {
+    color: #be185d;
+    border-bottom: 2px solid #ec4899;
+}
+
+/* ── toc A: シンプルリスト ───────────────────────────────────── */
+section.toc ol li {
+    color: #3b1f2b;
+    border-bottom: 1px solid #fbcfe8;
+}
+
+section.toc ol li::before {
+    color: #be185d;
+}
+
+/* ── toc B: グリッドカード ───────────────────────────────────── */
+section.toc-grid ol li {
+    background: #fce7f3;
+    border: 1px solid #fbcfe8;
+    border-left: 5px solid #ec4899;
+    color: #3b1f2b;
+}
+
+section.toc-grid ol li::before {
+    color: #be185d;
+}
+
+/* ── toc C: グリッドカード・列優先 ──────────────────────────── */
+section.toc-grid-col ol li {
+    background: #fce7f3;
+    border: 1px solid #fbcfe8;
+    border-left: 5px solid #ec4899;
+    color: #3b1f2b;
+}
+
+section.toc-grid-col ol li::before {
+    color: #be185d;
+}
+
+/* ── 脚注 ────────────────────────────────────────────────────── */
+.footnote {
+    color: #f9a8d4;
+    border-top: 1px solid #fbcfe8;
+}

@@ -1,0 +1,3 @@
+/*@theme blue-restricted */
+@import "blue-theme";
+:root { --restricted: "関係者限"; }

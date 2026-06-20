@@ -1,0 +1,3 @@
+/*@theme pink-restricted */
+@import "pink-theme";
+:root { --restricted: "関係者限"; }
