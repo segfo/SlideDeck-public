@@ -1,0 +1,537 @@
+/*@theme base-theme */
+@import "default"; /* デフォルトテーマを継承 */
+
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 40px;
+    padding-left: 80px;
+    padding-right: 80px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 24px;
+    background-color: #ffffff;
+    color: #334155;
+}
+header {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    padding: 0 80px;
+    color: #94a3b8;
+    font-size: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+/* フッタースタイル: ページ番号や補足情報用 */
+footer {
+    position: absolute;
+    bottom: 10px;
+    left: 80px;
+    color: #94a3b8;
+}
+/* ページ番号 */
+section::after {
+  left: auto;
+  transform: translateX(-50%);
+  content: attr(data-marpit-pagination)'/' attr(data-marpit-pagination-total);
+  bottom: 10px;
+}
+
+h1 {
+    color: #16213e;
+    border-bottom: 2px solid #0f3460;
+    padding-bottom: 0.2em; 
+}
+
+/* h1 {
+    color: #475569;
+    border-left: 8px solid #0f3460;
+    padding-left: 20px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+strong {
+    color: #1e293b;
+    background: linear-gradient(transparent 70%, #7657ff56 70%);
+} */
+
+.fact {
+    background: #e8f4f8; 
+    border-left: 4px solid #0f3460; 
+    padding: 0.1em 0.5em 0.1em;
+    margin: 0, 0;
+}
+.fact p {
+    margin: 0.2em;
+}
+
+code, pre {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+}
+/* インラインコード（文中の `これ`）をちょっとかっこよく */
+p code{
+    background-color: #f1f5f9;
+    color: #e11d48;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+table { width: auto; margin: 0 auto; }
+th {
+    background: #0f3460;
+    color: white;
+}
+
+section.compare .compare-card code {
+    color: #e11d48;
+    background-color: #f1f5f9;
+}
+
+h2 {
+    color: #475569;
+    border-left: 8px solid #0f3460;
+    padding-left: 20px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+/* ============================================================
+   比較スライド
+   使い方:
+     <!-- _class: compare -->
+
+     # タイトル
+
+     <div class="compare-cards">
+       <div class="compare-card">
+         ## 比較項目1
+         1. できること
+         2. できること
+       </div>
+       <div class="compare-card">
+         ## 比較項目2
+         1. できること
+         2. できること
+       </div>
+     </div>
+
+   compare-cards の数に応じて自動で列数が調整される
+   ============================================================ */
+section.compare {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+section.compare h1 {
+    margin-bottom: 8px;
+}
+
+section.compare .compare-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+/* ------------------------------------------------------------
+   【設計方針】compare カードは h2 の有無で見た目を分岐させない。
+     - h2あり = ヘッダーあり / h2なし = ヘッダーなし。それ以外は完全に同一。
+     - カードのボックス見た目（枠・背景・影・角丸）はこの base 1箇所に集約。
+       見た目を変えたいときはここだけ編集すれば両カードに反映される。
+     - h2固有のスタイルは下の `.compare-card h2`（青ヘッダー帯）だけ。
+     - コンテンツ要素（> :not(h2)）はボーダー/背景/影を持たず、カード自体がボックス。
+     ※ かつて :has(> h2) / :not(:has(> h2)) に見た目をコピペしていたが、
+        変更が3箇所に分散し、h2あり時に要素間へ分割線が出るバグの原因だったため統合した。
+   ------------------------------------------------------------ */
+section.compare .compare-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #dbe4ef;
+    box-shadow: 0 3px 10px rgba(15, 52, 96, 0.10);
+}
+
+section.compare .compare-card h2 {
+    margin: 0;
+    padding: 12px 16px;
+    border-left: none;
+    border-bottom: none;
+    color: #ffffff;
+    border-radius: 0;
+    text-align: center;
+    font-size: 24px;
+    box-shadow: 0 2px 8px rgba(15, 52, 96, 0.18);
+    background: #6f98c9;
+}
+
+/* 全カード共通: コンテンツ要素はボーダーなし・背景透明（カード自体がボックス） */
+section.compare .compare-card > :not(h2) {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    padding-top: 18px;
+    padding-right: 8px;
+    padding-bottom: 18px;
+    padding-left: 8px;        /* テキストを左から浮かせる。表は下の !important で 0 に、リストは 38px に上書き */
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+/* 最後のコンテンツ要素が残りスペースを埋めてカード高さを揃える */
+section.compare .compare-card > :not(h2):last-child {
+    flex: 1;
+}
+
+/* ボックス見た目（枠/背景/影/角丸）は base .compare-card に集約済み。
+   h2あり/なしの差は .compare-card h2（ヘッダー）の有無だけ。 */
+
+section.compare .compare-card ol {
+    padding-left: 38px;
+}
+
+section.compare .compare-card ul {
+    padding-left: 38px;
+}
+
+section.compare .compare-card p {
+    margin: 0;
+}
+
+section.compare .compare-card p:has(> img),
+section.compare .compare-card p:has(> a > img) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+section.compare .compare-card img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+section.compare .compare-card p > img,
+section.compare .compare-card p > a > img {
+    width: 100%;
+    object-fit: contain;
+}
+
+section.compare .compare-card table {
+    display: table;
+    margin: 0 auto !important;
+    width: 100%;
+    max-width: 100%;
+    background: #ffffff;
+    border: 1px solid #dbe4ef;
+    border-top: none;
+    flex: 1;
+    box-shadow: 0 3px 10px rgba(15, 52, 96, 0.10);
+    table-layout: fixed;
+}
+
+/* ============================================================
+   全カード共通: 直置き要素の調整（h2あり・なし両方に適用）
+   padding-left は padding ショートハンドで上書きされないよう個別指定にしてあるため、
+   このルールが両カードタイプで padding-left を共通管理できる
+   ============================================================ */
+section.compare .compare-card > ul,
+section.compare .compare-card > ol {
+    padding-left: 38px;
+}
+
+/* テーブル直置き: フラッシュ表示。padding/margin に !important が必要な理由:
+   上位ルール(.compare-card > :not(h2) など)の specificity が高く、
+   通常の上書きでは負けてしまうため */
+section.compare .compare-card > table {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+section.compare .compare-card th,
+section.compare .compare-card td {
+    border: 1px solid #e2e8f0;
+    padding: 0.55em 0.7em;
+    text-align: center;
+    vertical-align: middle;
+    word-break: break-word;
+}
+
+section.compare .compare-card table th,
+section.compare .compare-card table td {
+    width: auto;
+}
+
+section.compare .compare-card th {
+    background: #edf4fb;
+    color: #1e293b;
+}
+
+section.compare .compare-card ol li {
+    margin: 0.2em 0;
+    line-height: 1.5;
+}
+
+section.compare .compare-card ul li {
+    margin: 0.2em 0;
+    line-height: 1.5;
+}
+
+section.compare .compare-card h2 + ol strong {
+    background: none;
+    color: #3b1f2b;
+}
+
+section.compare .compare-card h2 + ul strong {
+    background: none;
+    color: #3b1f2b;
+}
+
+section.compare .compare-card:last-child ol {
+    margin-bottom: 0;
+}
+
+section.compare .compare-card ol li::marker {
+    color: #475569;
+}
+
+strong {
+    color: #1e293b;
+    background: linear-gradient(transparent 70%, #7657ff56 70%);
+}
+section.divider,
+section.title {
+    background-color: #ffffff;
+    justify-content: center;
+    padding-top: 0;
+}
+section.divider h1,
+section.title h1 {
+    color: #16213e;
+    border-bottom: 2px solid #0f3460;
+    text-align: center;
+    font-size: 60px;
+}
+section.divider h2,
+section.title h2 {
+    color: #7698c0;
+    border-left: none;
+    text-align: center;
+    padding-left: 0;
+    margin-top: 20px;
+}
+
+img[src*='#center'] {
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ============================================================
+   目次スライド共通 — 全 toc クラスに適用
+   使い方:
+     <!-- _class: toc -->          シンプルリスト型
+     <!-- _class: toc-grid -->     グリッド・行優先  (1→2→3 / 4→5→6)
+     <!-- _class: toc-grid-col --> グリッド・列優先  (1→2→3 / 4→5→6 を縦に)
+   ============================================================ */
+section.toc,
+section.toc-grid,
+section.toc-grid-col {
+    justify-content: flex-start;
+    padding-top: 50px;
+}
+
+/* h1 の下線を divider スタイルに統一 */
+section.toc h1,
+section.toc-grid h1,
+section.toc-grid-col h1 {
+    color: #16213e;
+    border-bottom: 2px solid #0f3460;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+/* ============================================================
+   目次スタイル A: シンプルリスト型 (section.toc)
+   縦並び・番号アクセントカラー付きリスト
+   元に戻す場合: このブロックごと削除
+   ============================================================ */
+section.toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* toc-grid-col と同じ列優先 auto-fit 挙動:
+       ≤7項目 → 1列・幅100% / 8項目〜 → 2列に自動展開 */
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, auto);
+    grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
+    gap: 0 24px;
+    counter-reset: toc-counter;
+}
+
+section.toc ol li {
+    counter-increment: toc-counter;
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+}
+
+section.toc ol li::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: #0f3460;
+    font-weight: bold;
+    font-size: 30px;
+    min-width: 50px;
+}
+
+/* ============================================================
+   目次スタイル B: グリッドカード型 (section.toc-grid)
+   2列グリッド・各項目をカード風に表示
+   元に戻す場合: このブロックごと削除
+   ============================================================ */
+section.toc-grid ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    counter-reset: toc-counter;
+}
+
+section.toc-grid ol li {
+    counter-increment: toc-counter;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #0f3460;
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 22px;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+section.toc-grid ol li::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: #0f3460;
+    font-weight: bold;
+    font-size: 30px;
+    min-width: 30px;
+}
+
+/* ============================================================
+   目次スタイル C: グリッドカード型・列優先 (section.toc-grid-col)
+   items が上→下→上→下 と列単位で流れる
+
+   デフォルト6行。動作:
+     ≤6項目 → 1列・幅100%  (auto-fit が空列トラックを潰す)
+     7項目〜 → 2列に展開    (minmax(45%, 1fr) で最大2列まで)
+   行数を変えたい場合は <style scoped> で上書き:
+     section ol { grid-template-rows: repeat(4, auto); }
+   元に戻す場合: このブロックごと削除
+   ============================================================ */
+section.toc-grid-col ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    /* 列優先フロー: 先に列を埋めてから次の列へ */
+    grid-auto-flow: column;
+    /* 6行固定: 7項目目から次の列へ溢れる */
+    grid-template-rows: repeat(6, auto);
+    /* auto-fit: 使われない列トラックを潰す → ≤6項目なら1列100%幅になる */
+    grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
+    gap: 8px 16px;
+    counter-reset: toc-counter;
+}
+
+section.toc-grid-col ol li {
+    counter-increment: toc-counter;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #0f3460;
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 22px;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+section.toc-grid-col ol li::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: #0f3460;
+    font-weight: bold;
+    font-size: 30px;
+    min-width: 30px;
+}
+
+/* ============================================================
+   脚注 (.footnote)
+   ============================================================ */
+.footnote {
+    position: absolute;
+    bottom: 40px;
+    left: 80px;
+    right: 80px;
+    font-size: 14px;
+    color: #94a3b8;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 6px;
+    line-height: 1.6;
+}
+
+/* footnote 内の空行・段落マージン差を吸収する */
+.footnote p {
+    margin: 0;
+}
+
+.footnote > :first-child {
+    margin-top: 0;
+}
+
+.footnote > :last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================================
+   関係者限バッジ（header は left:0; right:0 でスライド全幅のため right:16px が右端）
+   パターン1: 通常テーマ → --restricted: none でバッジ非表示
+   パターン2: xxx-restricted テーマ → :root の変数を上書きして全体表示
+   パターン3: _class: restricted → 強制表示
+   パターン4: _class: restricted-off → 強制非表示
+   ============================================================ */
+:root { --restricted: none; }
+
+header::after {
+    content: var(--restricted);
+    position: absolute;
+    top: -6px;
+    right: 6px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ff3874;
+    border: 1.5px solid #ff3874;
+    padding: 2px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+section.restricted header::after     { content: "関係者限"; }
+section.restricted-off header::after { content: none; }

@@ -1,0 +1,35 @@
+# === 生成物（Marp などからのエクスポート） ===
+# .md から生成される PDF はソースから再生成できるため追跡しない
+*.pdf
+# HTML/PPTX エクスポートも同様
+*.html
+*.pptx
+
+# === バックアップ・一時ファイル ===
+*.bak
+*.tmp
+*.orig
+*~
+
+# === エディタ／個人環境設定 ===
+.vscode/
+.idea/
+
+# === Python ===
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# === OS が生成するファイル ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === その他 ===
+*.md
+*.svg
+*.png
+*.sh
+*.py

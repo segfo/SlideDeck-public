@@ -1,35 +1,34 @@
 /*@theme blue-theme */
-@import "base-theme"; /* default_theme を継承 */
+@import "base-theme"; /* base-theme（＝master 骨格）を継承し色だけ差し替え */
 
 /* ── カラーパレット (明るい青系) ──────────────────────────────────
-   --blue-dark   : #0369a1  見出し・アクセント主色
-   --blue-mid    : #0ea5e9  ボーダー・装飾
-   --blue-light  : #e0f2fe  背景ハイライト
-   --blue-bg     : #f0f9ff  スライド背景
+   dark  : #0369a1  見出し・番号・濃色アクセント
+   mid   : #0ea5e9  ボーダー・装飾（semantic --accent）
+   light : #e0f2fe  背景ハイライト
+   bg    : #f0f9ff  スライド背景
    ──────────────────────────────────────────────────────────────── */
 
-section {
-    background-color: #f0f9ff;
-    color: #0c2d48;
+:root {
+    --color-bg: #f0f9ff;
+    --color-text: #0c2d48;
+    --accent: #0ea5e9;          /* 線・マーカー・カード枠アクセント */
+    --muted: #7dd3fc;           /* header / footer / 脚注 */
+    --border-soft: #bae6fd;     /* 罫線 */
+    --surface: #e0f2fe;         /* toc カード背景 */
+    --highlight: #e0f2fe;       /* .fact 背景 */
+    --card-header-bg: #7dd3fc;  /* compare カードヘッダ */
+    --card-header-color: #0c2d48;
 }
 
-header {
-    color: #7dd3fc;
-    border-bottom: 1px solid #bae6fd;
-}
-
-footer {
-    color: #7dd3fc;
-}
-
-h1 {
+/* 濃色トーン（--accent と別色にしたい箇所のみ個別指定） */
+h1, h2,
+section.divider h1, section.title h1,
+section.toc h1, section.toc-grid h1, section.toc-grid-col h1 {
     color: #0369a1;
-    border-bottom: 2px solid #0ea5e9;
 }
 
-h2 {
-    color: #0369a1;
-    border-left: 8px solid #0ea5e9;
+section.divider h2, section.title h2 {
+    color: #38bdf8;
 }
 
 strong {
@@ -37,82 +36,15 @@ strong {
     background: linear-gradient(transparent 70%, #38bdf880 70%);
 }
 
-.fact {
-    background: #e0f2fe;
-    border-left: 4px solid #0ea5e9;
-}
-
+/* 非カード表ヘッダ */
 th {
     background: #0369a1;
     color: white;
 }
 
-/* ── divider ─────────────────────────────────────────────────── */
-section.divider,
-section.title {
-    background-color: #f0f9ff;
-}
-
-section.divider h1,
-section.title h1 {
-    color: #0369a1;
-    border-bottom: 2px solid #0ea5e9;
-}
-
-section.divider h2,
-section.title h2 {
-    color: #38bdf8;
-}
-
-/* ── toc 共通 h1 ─────────────────────────────────────────────── */
-section.toc h1,
-section.toc-grid h1,
-section.toc-grid-col h1 {
-    color: #0369a1;
-    border-bottom: 2px solid #0ea5e9;
-}
-
-/* ── toc A: シンプルリスト ───────────────────────────────────── */
-section.toc ol li {
-    color: #0c2d48;
-    border-bottom: 1px solid #bae6fd;
-}
-
-section.toc ol li::before {
-    color: #0369a1;
-}
-
-/* ── toc B: グリッドカード ───────────────────────────────────── */
-section.toc-grid ol li {
-    background: #e0f2fe;
-    border: 1px solid #bae6fd;
-    border-left: 5px solid #0ea5e9;
-    color: #0c2d48;
-}
-
-section.toc-grid ol li::before {
-    color: #0369a1;
-}
-
-/* ── toc C: グリッドカード・列優先 ──────────────────────────── */
-section.toc-grid-col ol li {
-    background: #e0f2fe;
-    border: 1px solid #bae6fd;
-    border-left: 5px solid #0ea5e9;
-    color: #0c2d48;
-}
-
+/* toc 番号は濃色（カード枠の mid とは別トーン） */
+section.toc ol li::before,
+section.toc-grid ol li::before,
 section.toc-grid-col ol li::before {
     color: #0369a1;
-}
-
-/* ── 脚注 ────────────────────────────────────────────────────── */
-.footnote {
-    color: #7dd3fc;
-    border-top: 1px solid #bae6fd;
-}
-
-section.compare h2 {
-    background: #7dd3fc;
-    color:#0c2d48;
 }
