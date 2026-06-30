@@ -16,7 +16,6 @@ header {
     padding: 0 80px;
     color: var(--muted);
     font-size: 20px;
-    border-bottom: 1px solid var(--border-soft);
 }
 
 footer {
@@ -30,14 +29,14 @@ h1 {
     color: #16213e;
     border-bottom: 2px solid var(--accent);
     padding-bottom: 0.2em;
+    font-size: 36px;   /* 通常 h1 を toc h1 と同寸法に（スライド種別での寸法差を解消）*/
 }
 
 h2 {
     color: #475569;
     border-left: 8px solid var(--accent);
     padding-left: 20px;
-    margin-top: 0px;
-    margin-bottom: 10px;
+    /* margin は master の画一ルール（上0/下 --space-block）に委譲 */
 }
 
 strong {
@@ -45,11 +44,7 @@ strong {
     background: linear-gradient(transparent 70%, #7657ff56 70%);
 }
 
-/* カード外も含むテーブル */
-table {
-    width: auto;
-    margin: 0 auto;
-}
+/* テーブルの width / margin は master の変数駆動ルールに委譲（骨格は _master.css に集約） */
 th {
     background: var(--accent);
     color: white;
@@ -93,5 +88,5 @@ section.toc-grid-col h1 {
     color: #16213e;
     border-bottom: 2px solid var(--accent);
     font-size: 36px;
-    margin-bottom: 30px;
+    /* margin-bottom は master の画一ルール（--space-block）に委譲 */
 }

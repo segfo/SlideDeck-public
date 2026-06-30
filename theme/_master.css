@@ -17,6 +17,7 @@
     /* --- 本文・配色 --- */
     --font-size: 24px;
     --line-height: normal;
+    --space-block: 0.8em;       /* ブロック要素の標準下マージン（部品間間隔の単一ソース）*/
     --color-bg: #ffffff;
     --color-text: #334155;
     --accent: #0f3460;          /* 主アクセント（線・番号・マーカー） */
@@ -57,6 +58,10 @@
     --footnote-border: 1px solid var(--border-soft);
     --footnote-opacity: 1;
 
+    /* --- テーブルサイズ（プリセット _class / <style scoped> で上書き） --- */
+    --table-width: auto;        /* 横幅。table-full で 100% に */
+    --table-scale: 1;           /* 文字＋セル余白の倍率（padding は em 指定なので連動拡縮） */
+
     /* --- 関係者限バッジ --- */
     --restricted: none;
     --badge-color: #ff3874;
@@ -95,7 +100,7 @@ code, pre {
 }
 
 /* インラインコード（文中の `これ`） */
-p code {
+code {
     background-color: var(--code-bg);
     color: var(--code-color);
     padding: 0.2em 0.4em;
@@ -104,16 +109,72 @@ p code {
     border: var(--code-border);
 }
 
-/* 重要な補足 */
+/* 重要な補足（マージンは下の画一ルールで管理）*/
 .fact {
     background: var(--highlight);
     border-left: 4px solid var(--accent);
-    padding: 0.1em 0.5em 0.1em;
-    margin: 0;
+    padding: 0.4em 0.6em;   /* 上下対称: 内側 p の margin は 0 にし、この padding だけで上下の余白を決める */
 }
 .fact p {
-    margin: 0.2em;
+    margin: 0;
 }
+.fact p + p {
+    margin-top: 0.4em;      /* 段落間のみ（上下端の余白には影響しない）*/
+}
+
+/* ============================================================
+   ブロック要素の下マージン画一化（下マージン規約: 上0 / 下 --space-block）
+   ------------------------------------------------------------
+   Marp 既定の縦マージンや派生独自値への依存を排除し、部品間間隔を単一ソース化する。
+   表紙(title/divider)・compare は別レイアウトのため除外。
+   - 非見出し: 中 specificity で確定適用（画像段落・表の中央寄せ等も縦のみ統一）。
+   - 見出し/blockquote: 低 specificity (:where) のベースライン。
+     派生テーマが明示 margin を持つ場合（ub の h1/h2/blockquote 等）はそちらを温存する。
+   ============================================================ */
+section:not(.compare):not(.title):not(.divider) > :is(p, ul, ol, pre, table, .fact) {
+    margin-top: 0;
+    margin-bottom: var(--space-block);
+}
+/* 見出し/blockquote: scope を :where() で包み specificity を (0,0,1) に抑える。
+   ＝派生の plain な h1/h2/blockquote (ub の mb:24/10/16px 等) が source order で勝ち温存され、
+   margin を明示していない要素（base 等）には本ベースラインの --space-block が効く。 */
+:where(section:not(.compare):not(.title):not(.divider)) > :is(h1, h2, h3, blockquote) {
+    margin-bottom: var(--space-block);
+}
+
+/* ============================================================
+   テーブルサイズ制御（幅×倍率の2軸プリセット _class）
+   ------------------------------------------------------------
+   既定: 横幅 auto / 倍率 1。スライド単位の _class でプリセットを当てる。
+   幅・倍率は独立した軸なので、空白区切りで自由に組み合わせられる。
+     <!-- _class: table-w75 -->            … 幅75%
+     <!-- _class: table-x2 -->             … 倍率2倍
+     <!-- _class: table-w100 table-x3 -->  … 幅100%＋3倍（組み合わせ）
+   幅 w25/50/75/100 × 倍率 x1〜x5 ＝ 20通り（既定の auto/1倍も含めて約30通り）。
+   セル余白は各テーマが em で定義しているため font-size 連動で自動拡縮する。
+   compare カード内テーブルは別レイアウトのため除外。
+   ============================================================ */
+section:not(.compare) table {
+    display: table;
+    /* 変数が未指定の場合は auto になる */
+    width: var(--table-width, auto);
+    margin-inline: auto;
+    /* 変数が未指定の場合は 1 になる */
+    font-size: calc(1em * var(--table-scale, 1));
+}
+
+/* 幅プリセット（--table-width） */
+section.table-w25  { --table-width: 25%; }
+section.table-w50  { --table-width: 50%; }
+section.table-w75  { --table-width: 75%; }
+section.table-w100 { --table-width: 100%; }
+
+/* 倍率プリセット（--table-scale、等倍〜最大5倍） */
+section.table-x0_5 { --table-scale: 0.5; }
+section.table-x0_75 { --table-scale: 0.75; }
+section.table-x1_25 { --table-scale: 1.25; }
+section.table-x1_5 { --table-scale: 1.5; }
+section.table-x2 { --table-scale: 2; }
 
 /* 画像の中央寄せ */
 img[src*='#center'] {
@@ -143,21 +204,23 @@ img[src*='#center'] {
 
    compare-cards の数に応じて自動で列数が調整される
    ============================================================ */
+/* 間隔は flex gap ではなく下マージン規約（各部品が下に --space-block）で統一。
+   gap だと margin と加算されコードブロック等より広くなるため使わない。 */
 section.compare {
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
 section.compare h1 {
-    margin-bottom: 8px;
+    margin-bottom: var(--space-block);
 }
 
 section.compare .compare-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 18px;
+    gap: 18px;                           /* これはカード間（横）の間隔。縦の部品間隔とは別 */
     align-items: stretch;
+    margin-bottom: var(--space-block);   /* カード直後（fact 等）をコードブロックと同じ 0.8em に */
 }
 
 /* ------------------------------------------------------------
@@ -315,12 +378,8 @@ section.compare .compare-card ol li::marker {
      <!-- _class: toc-grid-col --> グリッド・列優先  (1→4 / 2→5 を縦に)
    ※ toc の h1 は見出しデザインがテーマ固有のため各テーマ側で定義する
    ============================================================ */
-section.toc,
-section.toc-grid,
-section.toc-grid-col {
-    justify-content: flex-start;
-    padding-top: 50px;
-}
+/* レイアウト（justify-content / padding-top）は base section と共通。
+   ヘッダー〜タイトル間のマージンを通常スライドと揃えるため独自 override は持たない。 */
 
 /* ------------------------------------------------------------
    目次スタイル A: シンプルリスト型 (section.toc)
